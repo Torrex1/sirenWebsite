@@ -3,6 +3,10 @@ import db from "../database/db.js";
 class FeedbackController {
     async createFeedback (req, res) {
         const { rating, context, userId } = req.body;
+
+        if (rating > 5 || rating < 1) 
+            return res.status(400).json('Rating must be between 1 and 5');
+
         const feedback = await db.query('INSERT INTO feedback (rating, context, user_id) VALUES ($1, $2, $3) RETURNING *',
             [rating, context, userId]
         )
