@@ -5,6 +5,7 @@ import db from "./database/db.js";
 import userRouter from "./routes/user.route.js";
 import feedbackRouter from "./routes/feedback.route.js";
 import productRouter from "./routes/product.route.js";
+import categoryRouter from "./routes/category.route.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api', userRouter);
 app.use('/api', feedbackRouter);
 app.use('/api', productRouter);
+app.use('/api', categoryRouter);
 
 const start = async () => {
     try {
