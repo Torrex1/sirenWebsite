@@ -3,7 +3,8 @@ const router = Router();
 
 import UserController from "../controller/user.controller.js";
 
-router.post('/user', UserController.createUser);
+router.post('/register', UserController.registration);
+router.post('/login', UserController.login);
 router.get('/users', UserController.getUsers);
 router.get('/user/:id', UserController.getOneUser);
 router.put('/user/:id', UserController.updateUser);
