@@ -23,7 +23,6 @@ class UserController {
         )
 
         // генерация токена
-
         const tokens = tokenService.generateToken({id: user.rows[0].id});
 
         // сохранение refresh Токена в БД
@@ -31,13 +30,46 @@ class UserController {
             [user.rows[0].id, tokens.refresh_token]);
 
         res
-            .cookie('refreshToken', tokens.refresh_token, { httpOnly: true })
-            .json({ user: user.rows[0], access_token: tokens.refresh_token});
-
+            .cookie('refreshToken', tokens.refresh_token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
+            .json({ user: user.rows[0], access_token: tokens.access_token, refresh_token: tokens.refresh_token });
     }
 
     async login (req, res) {
+        const {username, password} = req.body;
 
+        const user = await db.query('SELECT id, username, password FROM users WHERE username = $1',
+            [username]);
+        if (user.rows.length === 0) {
+            return res.status(400).json({message: "Пользователя с таким логином не существует"});
+        }
+        console.log(user.rows);
+
+        const isPassValid = await bcrypt.compare(password, user.rows[0].password);
+        if (!isPassValid) {
+            return res.status(400).json({message: "Неверный логин или пароль"});
+        }
+
+        //генерация токена
+        const tokens = tokenService.generateToken({id: user.rows[0].id});
+
+        // сохранение токена в БД
+        await db.query('INSERT INTO token (userId, refreshToken) VALUES($1, $2) RETURNING *',
+            [user.rows[0].id, tokens.refresh_token]);
+
+        res
+            .cookie('refreshToken', tokens.refresh_token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
+            .json({ user: user.rows[0], access_token: tokens.access_token, refresh_token: tokens.refresh_token });
+
+    }
+
+    async logout (req, res) {
+        const { refreshToken } = req.cookies;
+
+        await db.query('DELETE FROM token WHERE refreshToken = $1',
+            [refreshToken]);
+
+        res.clearCookie('refreshToken');
+        return res.status(200).json({ message: "Вы успешно вышли" })
     }
 
     async getUsers (req, res) {
