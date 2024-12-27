@@ -72,6 +72,33 @@ class UserController {
         return res.status(200).json({ message: "Вы успешно вышли" })
     }
 
+    async refresh(req, res) {
+        const { refreshToken } = req.cookies;
+
+        if (!refreshToken) {
+            return res.status(401).json({message: "Пользователь не авторизован!"});
+        }
+
+        //проверяем токен в БД
+        const tokenData = db.query('SELECT refreshToken FROM token WHERE refreshToken = $1',[refreshToken]);
+        if (tokenData.rows.length === 0) {
+            return res.status(403).json({message: "Недействительный токен!"});
+        }
+
+        const userData = tokenService.validateRefreshToken(refreshToken);
+        if (!userData) {
+            return res.status(403).json({message: "Недействительный токен!"});
+        }
+
+        const token = tokenService.generateToken({ id: userData.id });
+
+        await db.query('UPDATE token SET refreshToken = $1 WHERE userId = $2',[token.refresh_token, userData.id]);
+
+        res
+            .cookies('refreshToken', token.refresh_token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
+            .json({ accessToken: token.access_token });
+    }
+
     async getUsers (req, res) {
         const users = await db.query('SELECT * from users');
 
