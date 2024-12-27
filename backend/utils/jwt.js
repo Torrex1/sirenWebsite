@@ -11,6 +11,24 @@ class TokenService {
 
         return { access_token, refresh_token };
     }
+
+    validateAccessToken(token) {
+        try {
+            return jwt.verify(token, process.env.JWT_ACCESS);
+        }
+        catch (error) {
+            return null;
+        }
+    }
+
+    validateRefreshToken(token) {
+        try {
+            return jwt.verify(token, process.env.JWT_REFRESH);
+        }
+        catch (error) {
+            return null;
+        }
+    }
 }
 
 export default new TokenService();
