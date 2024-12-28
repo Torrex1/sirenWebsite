@@ -35,7 +35,7 @@ class UserController {
     }
 
     async login (req, res) {
-        const {username, password} = req.body;
+        const { username, password } = req.body;
 
         const user = await db.query('SELECT id, username, password FROM users WHERE username = $1',
             [username]);
@@ -52,9 +52,16 @@ class UserController {
         //генерация токена
         const tokens = tokenService.generateToken({id: user.rows[0].id});
 
-        // сохранение токена в БД
-        await db.query('INSERT INTO token (userId, refreshToken) VALUES($1, $2) RETURNING *',
-            [user.rows[0].id, tokens.refresh_token]);
+        // проверка существует токен
+        const isTokenExists = await db.query('SELECT * FROM token WHERE userId = $1', [user.rows[0].id]);
+        if (isTokenExists.rows.length > 0) {
+            await db.query('UPDATE token SET refreshToken = $1 WHERE userId = $2', [tokens.refresh_token, user.rows[0].id]);
+        } else {
+
+            // сохранение токена в БД
+            await db.query('INSERT INTO token (userId, refreshToken) VALUES($1, $2) RETURNING *',
+                [user.rows[0].id, tokens.refresh_token]);
+        }
 
         res
             .cookie('refreshToken', tokens.refresh_token, { httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000 })
