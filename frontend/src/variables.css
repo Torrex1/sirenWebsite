@@ -1,0 +1,25 @@
+:root {
+    /*bg color*/
+    --bg-color: #F2EEF2;
+
+    /*header colors*/
+    --header-title-color: #9B789B;
+    --header-border: #D0C7D1;
+
+    /*main colors;*/
+    --main-title-color: #4E4B4B;
+
+    --main-bg-color: #fff;
+
+    --card-stroke: #F4E4F4;
+    --card-border-width: 1px;
+    --image-placeholder-color: #ECECEC;
+    --card-title: #000000;
+    --card-price: #000000;
+    --revies-title-opacity: 38;
+
+    /*footer colors*/
+    --footer-bg-color: #000000;
+    --signup-btn-color: #AE00FF;
+
+}
