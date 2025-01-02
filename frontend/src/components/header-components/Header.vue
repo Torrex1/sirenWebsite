@@ -21,8 +21,8 @@
       </ul>
 
       <ul class="icon-list">
-        <li class="search-icon">
-          <img src="../../assets/icons/search.svg" alt="search">
+        <li class="favorite-icon">
+          <img src="../../assets/icons/heart.svg" alt="search">
         </li>
         <li class="cart-icon">
           <img src="../../assets/icons/cart.svg" alt="cart">
