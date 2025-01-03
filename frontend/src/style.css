@@ -1,5 +1,17 @@
 @import "variables.css";
 
+@font-face {
+  font-family: "Helvetica";
+  src: url('assets/fonts/Helvetica.woff');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Helvetica-Bold";
+  src: url('assets/fonts/Helvetica-Bold.woff');
+  font-weight: bold;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,6 +20,7 @@
 
 body {
   background-color: var(--bg-color);
+  font-family: 'Helvetica', sans-serif;
 }
 
 ul {
