@@ -25,6 +25,8 @@
     border: none;
     background-color: rgba(200, 60, 225, 0.89);
     color: white;
+
+    font-family: 'Helvetica-Bold', sans-serif;
   }
   button:hover {
     background-color: rgba(171, 51, 193, 0.89);
