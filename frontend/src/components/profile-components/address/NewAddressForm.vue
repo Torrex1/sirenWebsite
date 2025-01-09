@@ -1,9 +1,11 @@
 <script setup>
-  import { useModalStore } from "../../../stores/modalStore.js";
   import { ref } from "vue";
+  import { useModalStore } from "../../../stores/modalStore.js";
   import axios from "axios";
 
   const modalStore = useModalStore();
+
+  const emit = defineEmits(['fetchAddressBooks']);
 
   const first_name = ref('');
   const last_name = ref('');
@@ -15,70 +17,73 @@
 
   const sendAddress = async () => {
 // user_id не проставляет потому что мы не передаем пока что!
-    await axios.post('http://localhost:3000/api/addAddress', {
-      first_name: first_name.value,
-      last_name: last_name.value,
-      country: country.value,
-      city: city.value,
-      address: address.value,
-      zipcode: zipcode.value,
-      phone: phone.value,
-    })
-        .then((response) => {
-      console.log(response);
-    })
+    try {
+      await axios.post('http://localhost:3000/api/address', {
+        first_name: first_name.value,
+        last_name: last_name.value,
+        country: country.value,
+        city: city.value,
+        address: address.value,
+        zipcode: zipcode.value,
+        phone: phone.value,
+      })
+      modalStore.closeModal()
+
+      emit("fetchAddressBooks");
+    }
+    catch (error) {
+      console.log('Ошибка при отправке формы', error);
+    }
   }
-
-
 </script>
 
 <template>
-  <form action="" @submit.prevent="modalStore.closeModal()">
+  <form @submit.prevent="sendAddress()">
 
     <h3>ADD ADDRESS</h3>
 
     <label>
       Country <br>
-      <input v-model="country" type="text" placeholder="Country">
+      <input v-model="country" type="text" placeholder="Country" required>
     </label>
 
     <div class="full-name">
       <label>
         First Name: <br>
-        <input v-model="first_name" type="text" placeholder="First Name">
+        <input v-model="first_name" type="text" placeholder="First Name" required>
       </label>
 
       <label>
         Last Name: <br>
-        <input v-model="last_name" type="text" placeholder="Last Name">
+        <input v-model="last_name" type="text" placeholder="Last Name" required>
       </label>
     </div>
 
     <label>
       Address <br>
-      <input v-model="address" type="text" placeholder="Address">
+      <input v-model="address" type="text" placeholder="Address" required>
     </label>
 
     <label>
       City <br>
-      <input v-model="city" type="text" placeholder="City">
+      <input v-model="city" type="text" placeholder="City" required>
     </label>
 
     <label>
       ZIP Code <br>
-      <input v-model="zipcode" type="text" placeholder="ZIP Code">
+      <input v-model="zipcode" type="text" placeholder="ZIP Code" >
     </label>
 
     <label>
-      Phone <br>
+      Phone
+      <span style="color: gray">(OPTIONAL)</span><br>
       <input v-model="phone" type="text" placeholder="Phone">
     </label>
 
     <div class="button-list">
-      <button>CANCEL</button>
-      <button @click="sendAddress()">ADD ADDRESS</button>
+      <button @click.prevent="modalStore.closeModal()">CANCEL</button>
+      <button>ADD ADDRESS</button>
     </div>
-
   </form>
 </template>
 
