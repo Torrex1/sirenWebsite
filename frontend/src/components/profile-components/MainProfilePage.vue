@@ -16,11 +16,28 @@
       </div>
 
       <div class="button-list">
-        <button>Order History</button>
-        <button>Address Book</button>
-        <button>Profile</button>
-        <button>FAQ</button>
-        <button>Log out</button>
+        <button @click="getButtonName" name="OrderHistory">
+          <img src="../../assets/icons/cart.svg" alt="">
+          Order History
+        </button>
+
+        <button @click="getButtonName" name="AddressBook">
+          <img src="../../assets/icons/address_book.svg" alt="">
+          Address Book
+        </button>
+
+        <button @click="getButtonName" name="UserProfile">
+          <img src="../../assets/icons/user.svg" alt="">
+          Profile
+        </button>
+        <button @click="getButtonName" name="FAQ">
+          <img src="../../assets/icons/faq.svg" alt="">
+          FAQ
+        </button>
+        <button @click="">
+          <img src="../../assets/icons/logout.svg" alt="">
+          Log out
+        </button>
       </div>
     </div>
 
