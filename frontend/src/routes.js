@@ -1,6 +1,6 @@
 const routes = [
     {
-        path: '/', component: import('../src/components/MainPage.vue'),
+        path: '/', component: () => import('../src/components/MainPage.vue'),
     }
 ]
 
