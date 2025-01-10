@@ -1,8 +1,22 @@
 <script setup>
+import { markRaw, ref} from "vue";
+
   import OrderHistory from "./OrderHistory.vue";
-  import AddressBook from "./AddressBook.vue";
+  import AddressBook from "./address/AddressBook.vue";
   import UserProfile from "./UserProfile.vue";
   import FAQ from "./FAQ.vue";
+
+  const components = {
+    OrderHistory: markRaw(OrderHistory),
+    AddressBook: markRaw(AddressBook),
+    UserProfile: markRaw(UserProfile),
+    FAQ: markRaw(FAQ),
+  }
+  const currentComponent = ref(null);
+  const getButtonName = (event) => {
+    currentComponent.value = components[event.target.name] || null;
+  }
+
 </script>
 
 <template>
@@ -41,8 +55,7 @@
     </div>
 
     <div class="right-side">
-<!--      <OrderHistory/>-->
-      <AddressBook/>
+      <component :is="currentComponent"/>
     </div>
 
   </div>
@@ -53,7 +66,6 @@
 <style scoped>
 .profile-container {
   display: flex;
-  //border: 1px solid #00ff28;
   margin-top: 4rem;
   padding: 4rem;
   gap: 10px;
@@ -62,14 +74,17 @@
 .left-side {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  border: 1px solid blue;
   flex-shrink: 0;
+  gap: 1rem;
+
+  border: 1px solid #b8a9b8;
+  border-radius: 5px;
   padding: 1rem;
 }
 
 .right-side {
-  border: 1px solid red;
+  border: 1px solid #b8a9b8;
+  border-radius: 5px;
   flex-grow: 1;
   padding: 1rem;
 }
@@ -77,19 +92,32 @@
 .button-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 500px;
+  gap: 15px;
+  width: 600px;
 }
 
 .button-list button {
   padding: 15px;
   border-radius: 5px;
   border: 1px solid #c3b9c3;
-  background-color: rgba(255, 255, 255, 0);
   cursor: pointer;
+  font-size: 18px;
+
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }
+
+.button-list button img {
+  width: 21px;
+  height: 21px;
+}
+.button-list button img {
+  opacity: 0.8;
+}
+
 .button-list button:hover {
-  border: 1px solid #b608b6;
+  border: 1px solid #17872c;
 }
 
 .user-info {
