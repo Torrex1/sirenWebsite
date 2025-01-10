@@ -8,7 +8,6 @@
 <template>
 
   <div class="profile-container">
-
     <div class="left-side">
       <div class="user-info">
         <span><b>WELCOME BACK</b></span> <br>
