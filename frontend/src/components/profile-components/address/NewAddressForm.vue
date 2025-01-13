@@ -1,83 +1,66 @@
 <script setup>
-  import { ref } from "vue";
+  import { reactive } from "vue";
   import { useModalStore } from "../../../stores/modalStore.js";
-  import axios from "axios";
+  import { useAddressStore} from "../../../stores/addressStore.js";
 
   const modalStore = useModalStore();
+  const addressStore = useAddressStore();
 
-  const emit = defineEmits(['fetchAddressBooks']);
+  const addressInfo = reactive({
+    first_name: "",
+    last_name: "",
+    phone: "",
+    country: "",
+    zipcode: "",
+    city: "",
+    address: "",
+  });
 
-  const first_name = ref('');
-  const last_name = ref('');
-  const country = ref('');
-  const city = ref('');
-  const address = ref('');
-  const zipcode = ref();
-  const phone = ref();
-
-  const sendAddress = async () => {
 // user_id не проставляет потому что мы не передаем пока что!
-    try {
-      await axios.post('http://localhost:3000/api/address', {
-        first_name: first_name.value,
-        last_name: last_name.value,
-        country: country.value,
-        city: city.value,
-        address: address.value,
-        zipcode: zipcode.value,
-        phone: phone.value,
-      })
-      modalStore.closeModal()
 
-      emit("fetchAddressBooks");
-    }
-    catch (error) {
-      console.log('Ошибка при отправке формы', error);
-    }
-  }
 </script>
 
 <template>
-  <form @submit.prevent="sendAddress()">
+  <form @submit.prevent="addressStore.sendAddressBook(addressInfo)">
 
     <h3>ADD ADDRESS</h3>
 
     <label>
       Country <br>
-      <input v-model="country" type="text" placeholder="Country" required>
+      <input v-model="addressInfo.country" type="text" placeholder="Country" required>
     </label>
 
     <div class="full-name">
       <label>
         First Name: <br>
-        <input v-model="first_name" type="text" placeholder="First Name" required>
+        <input v-model="addressInfo.first_name" type="text" placeholder="First Name" required>
       </label>
 
       <label>
         Last Name: <br>
-        <input v-model="last_name" type="text" placeholder="Last Name" required>
+        <input v-model="addressInfo.last_name" type="text" placeholder="Last Name" required>
       </label>
     </div>
 
     <label>
       Address <br>
-      <input v-model="address" type="text" placeholder="Address" required>
+      <input v-model="addressInfo.address" type="text" placeholder="Address" required>
     </label>
 
     <label>
       City <br>
-      <input v-model="city" type="text" placeholder="City" required>
+      <input v-model="addressInfo.city" type="text" placeholder="City" required>
     </label>
 
     <label>
       ZIP Code <br>
-      <input v-model="zipcode" type="text" placeholder="ZIP Code" >
+      <input v-model="addressInfo.zipcode" type="text" placeholder="ZIP Code" >
     </label>
 
     <label>
       Phone
       <span style="color: gray">(OPTIONAL)</span><br>
-      <input v-model="phone" type="text" placeholder="Phone">
+      <input v-model="addressInfo.phone" type="text" placeholder="Phone">
     </label>
 
     <div class="button-list">

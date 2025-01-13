@@ -1,31 +1,25 @@
 <script setup>
-import {onMounted, onUpdated, ref, watch} from "vue";
-  import axios from "axios";
+  import { onMounted } from "vue";
   import { useModalStore } from "../../../stores/modalStore.js";
+  import { useAddressStore } from "../../../stores/addressStore.js";
 
   import NewAddressForm from "./NewAddressForm.vue";
   import AddressInfoCard from "./AddressInfoCard.vue";
 
   const modalStore = useModalStore();
-
-  const items = ref([]);
-
-  const fetchAddressBooks = async () => {
-    const { data } = await axios.get('http://localhost:3000/api/address');
-    items.value = Array.isArray(data) ? data : [data];
-  }
+  const addressStore = useAddressStore();
 
   onMounted(async () => {
-    await fetchAddressBooks();
+    await addressStore.getAddressBook();
   })
 </script>
 
 <template>
   <h1>ADDRESS BOOK</h1>
   <div class="wrapper">
-    <span v-if="!items.length" class="emptyAddressBook">Здесь будут отображаться добавленные вами адреса</span>
+    <span v-if="!addressStore.items.length" class="emptyAddressBook">Здесь будут отображаться добавленные вами адреса</span>
     <AddressInfoCard v-else
-      v-for="item in items"
+      v-for="item in addressStore.items"
       :key="item.id"
       :id="item.id"
       :first_name="item.first_name"
@@ -34,7 +28,6 @@ import {onMounted, onUpdated, ref, watch} from "vue";
       :address="item.address"
       :zipcode="item.zipcode"
       :country="item.country"
-      @fetchAddressBooks="fetchAddressBooks"
     />
   </div>
 
@@ -42,7 +35,6 @@ import {onMounted, onUpdated, ref, watch} from "vue";
     ADD ADDRESS
   </button>
   <NewAddressForm v-else
-    @fetchAddressBooks="fetchAddressBooks"
   />
 </template>
 

@@ -1,5 +1,8 @@
 <script setup>
   import axios from "axios";
+  import { useAddressStore } from "../../../stores/addressStore.js";
+
+  const addressStore = useAddressStore();
 
   const props = defineProps({
     id: Number,
@@ -10,13 +13,12 @@
     zipcode: Number,
     country: String,
   });
-  const emit = defineEmits(['fetchAddressBooks']);
 
   const deleteAddress = async () => {
     try {
       await axios.delete(`http://localhost:3000/api/address/${props.id}`).then((response) => {
         console.log(response, "Все удалил!");
-        emit("fetchAddressBooks");
+        addressStore.getAddressBook();
       })
     }
     catch (error) {
