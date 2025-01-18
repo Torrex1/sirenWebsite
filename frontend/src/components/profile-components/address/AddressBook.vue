@@ -1,5 +1,6 @@
 <script setup>
   import { onMounted } from "vue";
+
   import { useModalStore } from "../../../stores/modalStore.js";
   import { useAddressStore } from "../../../stores/addressStore.js";
 
@@ -31,11 +32,11 @@
     />
   </div>
 
-  <button v-if="!modalStore.isModalOpen" @click="modalStore.openModal()" class="add-address">
+  <button v-if="!modalStore.isAddModalOpened" @click="modalStore.toggleAddModal()" class="add-address">
     ADD ADDRESS
   </button>
-  <NewAddressForm v-else
-  />
+
+  <NewAddressForm v-else />
 </template>
 
 <style scoped>
