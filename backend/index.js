@@ -9,6 +9,7 @@ import feedbackRouter from "./routes/feedback.route.js";
 import productRouter from "./routes/product.route.js";
 import categoryRouter from "./routes/category.route.js";
 import orderRouter from "./routes/order.route.js";
+import userAddressRouter from "./routes/userAddress.route.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api', feedbackRouter);
 app.use('/api', productRouter);
 app.use('/api', categoryRouter);
 app.use('/api', orderRouter);
+app.use('/api', userAddressRouter);
 
 const start = async () => {
     try {
