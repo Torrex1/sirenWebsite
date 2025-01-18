@@ -1,8 +1,10 @@
 <script setup>
-  import axios from "axios";
-  import { useAddressStore } from "../../../stores/addressStore.js";
+  import { ref } from "vue";
 
+  import { useAddressStore } from "../../../stores/addressStore.js";
   const addressStore = useAddressStore();
+
+  import UpdateAddress from "./UpdateAddress.vue";
 
   const props = defineProps({
     id: Number,
@@ -14,21 +16,15 @@
     country: String,
   });
 
-  const deleteAddress = async () => {
-    try {
-      await axios.delete(`http://localhost:3000/api/address/${props.id}`).then((response) => {
-        console.log(response, "Все удалил!");
-        addressStore.getAddressBook();
-      })
-    }
-    catch (error) {
-      console.log(error)
-    }
+  const isFormOpen = ref(false);
+  const closeEditForm = () => {
+      isFormOpen.value = !isFormOpen.value;
   }
+
 </script>
 
 <template>
-  <div class="address-info">
+  <div class="address-info" v-if="!isFormOpen">
     <span class="full-name">{{ first_name }} {{ last_name }},</span> <br>
     <span class="city">{{ city }}</span> <br>
     <span class="address">{{ address }}, </span>
@@ -36,17 +32,33 @@
     <span class="country">{{ country }}</span>
 
     <div class="button-list">
-      <button>EDIT</button>
-      <button @click="deleteAddress()">DELETE</button>
+      <button @click="closeEditForm()">EDIT</button>
+      <button @click="addressStore.deleteAddressBook(id)">DELETE</button>
     </div>
-
   </div>
+
+  <UpdateAddress v-else class="edit-address-form"
+   :id="id"
+   :first_name="first_name"
+   :last_name="last_name"
+   :city="city"
+   :address="address"
+   :zipcode="zipcode"
+   :country="country"
+   @closeEditForm="closeEditForm"
+  />
+
 </template>
 
 <style scoped>
 .address-info {
   border: 1px solid #cac7c7;
   padding: 30px;
+}
+
+.edit-address-form {
+  max-width: 100%;
+  width: 100%;
 }
 .address-info span {
   font-size: 16px;
