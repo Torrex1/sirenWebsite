@@ -1,7 +1,8 @@
 <script setup>
   import { reactive } from "vue";
+
   import { useModalStore } from "../../../stores/modalStore.js";
-  import { useAddressStore} from "../../../stores/addressStore.js";
+  import { useAddressStore } from "../../../stores/addressStore.js";
 
   const modalStore = useModalStore();
   const addressStore = useAddressStore();
@@ -17,12 +18,10 @@
   });
 
 // user_id не проставляет потому что мы не передаем пока что!
-
 </script>
 
 <template>
   <form @submit.prevent="addressStore.sendAddressBook(addressInfo)">
-
     <h3>ADD ADDRESS</h3>
 
     <label>
@@ -64,7 +63,7 @@
     </label>
 
     <div class="button-list">
-      <button @click.prevent="modalStore.closeModal()">CANCEL</button>
+      <button @click.prevent="modalStore.toggleAddModal()">CANCEL</button>
       <button>ADD ADDRESS</button>
     </div>
   </form>
