@@ -32,6 +32,30 @@ export const useAddressStore = defineStore("addressStore", {
             catch (error) {
                 console.log('Ошибка при отправке формы', error);
             }
+        },
+
+        async updateAddressBook (id, updatedData) {
+            try {
+                await axios.put(`http://localhost:3000/api/address/${id}`, updatedData)
+                console.log('Данные успешно обновлены!');
+                await this.getAddressBook();
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
+
+        async deleteAddressBook (id) {
+            try {
+                await axios.delete(`http://localhost:3000/api/address/${id}`)
+                    .then(async (response) => {
+                        console.log(response, "Все удалил!");
+                        await this.getAddressBook();
+                })
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
     }
 })
