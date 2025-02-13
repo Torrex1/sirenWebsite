@@ -1,18 +1,21 @@
 <script setup>
-import { markRaw, ref} from "vue";
-
+  import { markRaw, ref } from "vue";
   import OrderHistory from "./OrderHistory.vue";
   import AddressBook from "./address/AddressBook.vue";
   import UserProfile from "./UserProfile.vue";
   import FAQ from "./FAQ.vue";
 
+  import { useAuthStore } from "../../stores/authStore.js";
+  import { useRouter } from "vue-router";
+
+  const router = useRouter();
   const components = {
     OrderHistory: markRaw(OrderHistory),
     AddressBook: markRaw(AddressBook),
     UserProfile: markRaw(UserProfile),
     FAQ: markRaw(FAQ),
   }
-  const currentComponent = ref(null);
+  const currentComponent = ref(OrderHistory);
   const getButtonName = (event) => {
     currentComponent.value = components[event.target.name] || null;
   }
@@ -20,7 +23,6 @@ import { markRaw, ref} from "vue";
 </script>
 
 <template>
-
   <div class="profile-container">
     <div class="left-side">
       <div class="user-info">
@@ -39,18 +41,20 @@ import { markRaw, ref} from "vue";
           Address Book
         </button>
 
-        <button @click="getButtonName" name="UserProfile">
-          <img src="../../assets/icons/user.svg" alt="">
-          Profile
-        </button>
+<!--        <button @click="getButtonName" name="UserProfile">-->
+<!--          <img src="../../assets/icons/user.svg" alt="">-->
+<!--          Profile-->
+<!--        </button>-->
         <button @click="getButtonName" name="FAQ">
           <img src="../../assets/icons/faq.svg" alt="">
           FAQ
         </button>
-        <button @click="">
+
+        <button @click="useAuthStore().logout(); router.push('/')">
           <img src="../../assets/icons/logout.svg" alt="">
           Log out
         </button>
+
       </div>
     </div>
 
@@ -59,8 +63,6 @@ import { markRaw, ref} from "vue";
     </div>
 
   </div>
-
-
 </template>
 
 <style scoped>
