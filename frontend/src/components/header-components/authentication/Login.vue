@@ -1,19 +1,30 @@
 <script setup>
-  import axios from "axios";
+  import {reactive} from "vue";
+  import { useAuthStore } from "../../../stores/authStore.js";
+  import { useRouter } from "vue-router";
+
+  const authStore = useAuthStore();
+  const router = useRouter();
+
+  const loginData = reactive({
+    email: "",
+    password: "",
+  });
+
 </script>
 
 <template>
   <div class="modal-wrapper">
-    <form class="login-form">
+    <form class="login-form" @submit.prevent="authStore.login(loginData.email, loginData.password); router.push('/')">
       <h1>WELCOME BACK</h1>
       <label>
         <span>Email</span> <br>
-        <input type="email" PLACEHOLDER="Email" />
+        <input v-model="loginData.email" type="email" PLACEHOLDER="Email" />
       </label>
 
       <label>
         <span>Password</span> <br>
-        <input type="password" PLACEHOLDER="Пароль" />
+        <input v-model="loginData.password" type="password" PLACEHOLDER="Пароль" />
       </label>
 
       <span>Еще нет аккаунта?
