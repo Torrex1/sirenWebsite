@@ -5,7 +5,6 @@ import routes from './routes.js'
 
 import './style.css'
 import App from './App.vue'
-import * as path from "node:path";
 
 const pinia = createPinia();
 const app = createApp(App);
