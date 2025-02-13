@@ -1,5 +1,9 @@
 <script setup>
-
+  const props = defineProps({
+    id: Number,
+    title: String,
+    price: String,
+  })
 </script>
 
 <template>
@@ -11,8 +15,8 @@
 
     <div class="card-body">
       <div class="card-text">
-        <span class="product-title">Nike Pro</span>
-        <span class="price"><b>₽16.500</b></span>
+        <span class="product-title">{{ props?.title }}</span>
+        <span class="price"><b>₽{{ props?.price }}</b></span>
       </div>
 
       <div class="add-cart-icon" style="align-self: flex-end">
