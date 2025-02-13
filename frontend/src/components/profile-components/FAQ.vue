@@ -36,7 +36,7 @@
         <h3>{{ item.title }}</h3>
         <img src="../../assets/icons/down-arrow.svg" alt="down-arrow">
       </div>
-      <span v-show="openItems[index]">{{ item.description }}</span>
+      <span style="color: rgba(76,76,76,0.84)" v-show="openItems[index]">{{ item.description }}</span>
     </li>
   </ul>
 </template>
