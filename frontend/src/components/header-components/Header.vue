@@ -51,7 +51,6 @@
           </RouterLink>
         </li>
       </ul>
-
     </nav>
   </header>
 </template>
