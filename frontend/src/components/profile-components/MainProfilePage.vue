@@ -1,5 +1,5 @@
 <script setup>
-  import { markRaw, ref } from "vue";
+  import { markRaw, ref, watch } from "vue";
   import OrderHistory from "./OrderHistory.vue";
   import AddressBook from "./address/AddressBook.vue";
   import UserProfile from "./UserProfile.vue";
@@ -7,6 +7,9 @@
 
   import { useAuthStore } from "../../stores/authStore.js";
   import { useRouter } from "vue-router";
+
+  import $api from "../../axiosOptions/index_axios.js";
+  const authStore = useAuthStore();
 
   const router = useRouter();
   const components = {
@@ -20,6 +23,15 @@
     currentComponent.value = components[event.target.name] || null;
   }
 
+  const user_id = authStore.user.id;
+  const user_name = ref("");
+
+  const getUserData = async () => {
+    await $api.get(`/user/${user_id}`).then((response) => {
+      user_name.value = response.data.username;
+    })
+  }
+  getUserData();
 </script>
 
 <template>
@@ -27,7 +39,7 @@
     <div class="left-side">
       <div class="user-info">
         <span><b>WELCOME BACK</b></span> <br>
-        <span>Torrex</span>
+        <span>{{ user_name }}</span>
       </div>
 
       <div class="button-list">
@@ -41,10 +53,6 @@
           Address Book
         </button>
 
-<!--        <button @click="getButtonName" name="UserProfile">-->
-<!--          <img src="../../assets/icons/user.svg" alt="">-->
-<!--          Profile-->
-<!--        </button>-->
         <button @click="getButtonName" name="FAQ">
           <img src="../../assets/icons/faq.svg" alt="">
           FAQ
@@ -54,7 +62,6 @@
           <img src="../../assets/icons/logout.svg" alt="">
           Log out
         </button>
-
       </div>
     </div>
 
