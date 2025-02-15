@@ -7,6 +7,22 @@ export const useAuthStore = defineStore("authStore", {
         user: null,
     }),
     actions: {
+        async register(email, password, username) {
+            const response = await $api.post("/registration", {
+                email: email,
+                password: password,
+                username: username,
+            })
+
+            if (response.status === 200 || response.status === 201) {
+                const { access_token } = response.data;
+                localStorage.setItem("access_token", access_token);
+
+                this.isAuthenticated = true;
+                alert("User registered successfully.");
+            }
+        },
+
         async login (email, password)  {
             const response = await $api.post("/login", {
                 email: email,
@@ -17,7 +33,6 @@ export const useAuthStore = defineStore("authStore", {
                 localStorage.setItem("access_token", access_token);
 
                 this.isAuthenticated = true;
-                this.user = access_token;
                 alert("Login successfully");
             }
         },
@@ -28,7 +43,6 @@ export const useAuthStore = defineStore("authStore", {
                 if (res.status === 200) {
                     localStorage.removeItem("access_token");
                     this.isAuthenticated = false;
-                    this.user = null;
                 }
             }
             catch (error) {
@@ -43,8 +57,10 @@ export const useAuthStore = defineStore("authStore", {
                     Authorization: `Bearer ${token}`
                 }
             });
-            this.isAuthenticated = true;
-            this.user = response.data;
+            if (response.status === 200 || response.status === 201) {
+                this.isAuthenticated = true;
+                this.user = response.data.user;
+            }
         }
     }
 })
