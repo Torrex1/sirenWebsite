@@ -1,24 +1,33 @@
 <script setup>
+  import {reactive} from "vue";
+  import { useAuthStore } from "../../../stores/authStore.js";
 
+  const authStore = useAuthStore();
+
+  const registerOptions = reactive({
+    email: "",
+    password: "",
+    username: "",
+  });
 </script>
 
 <template>
     <div class="modal-wrapper">
-      <form class="login-form">
+      <form class="login-form" @submit.prevent="authStore.register(registerOptions.email, registerOptions.password, registerOptions.username, registerOptions.password)">
         <h1>Hello :)</h1>
         <label>
           <span>Username</span> <br>
-          <input type="text" PLACEHOLDER="Username" />
+          <input v-model="registerOptions.username" type="text" PLACEHOLDER="Username" />
         </label>
 
         <label>
           <span>Email</span> <br>
-          <input type="email" PLACEHOLDER="Email" />
+          <input v-model="registerOptions.email" type="email" PLACEHOLDER="Email" />
         </label>
 
         <label>
           <span>Password</span> <br>
-          <input type="password" PLACEHOLDER="Пароль" />
+          <input v-model="registerOptions.password" type="password" PLACEHOLDER="Пароль" />
         </label>
 
         <span>Уже есть аккаунт?
